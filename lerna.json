@@ -1,0 +1,12 @@
+{
+  "version": "independent",
+  "packages": [
+    "packages/*"
+  ],
+  "bootstrap": {
+    "npmClientArgs": [
+      "--no-package-lock"
+    ]
+  },
+  "useWorkspaces": true
+}

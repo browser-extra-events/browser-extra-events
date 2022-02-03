@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "declaration": false,
+    "strict": true,
+    "target": "ES2015",
+    "module": "ES2015",
+    "removeComments": true
+  },
+  "files": [
+    "main.ts"
+  ]
+}

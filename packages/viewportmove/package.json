@@ -1,0 +1,33 @@
+{
+  "name": "@browser-extra-events/viewportmove",
+  "version": "1.0.0",
+  "description": "Window viewport move event",
+  "browser": "dist/viewportmove-event.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "prepare": "npm run build",
+    "dev": "rollup -cw"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "javascript",
+    "browser",
+    "window",
+    "client",
+    "inner",
+    "rectangle",
+    "event",
+    "coordinates"
+  ],
+  "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
+    "rollup": "^2.67.0",
+    "typescript": "^4.5.5"
+  }
+}

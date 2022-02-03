@@ -1,0 +1,29 @@
+{
+  "name": "browser-extra-events",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "files": [
+    "packages/*/dist/",
+    "packages/*/package.json"
+  ],
+  "exports": {
+    "./windowmove": "./packages/windowmove/dist/index.js",
+    "./viewportmove": "./packages/viewportmove/dist/index.js",
+    "./screenchange": "./packages/screenchange/dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rostyslavb/browser-extra-events"
+  },
+  "scripts": {
+    "dev": "lerna run dev --parallel",
+    "build": "lerna run build",
+    "prepare": "lerna bootstrap",
+    "example": "npm --prefix ./example run dev"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
