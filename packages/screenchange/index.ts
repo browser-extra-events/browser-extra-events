@@ -1,13 +1,21 @@
 export {};
 
 declare global {
-  interface Window {
-    onscreenchange: ((this: GlobalEventHandlers, ev: Event) => any)
-      & ((this: Window, ev: Event) => any) | null;
+  interface ScreenEventMap {
+    "change": Event
   }
 
-  interface WindowEventMap {
-    "screenchange": Event
+  interface Screen extends EventTarget {
+    onchange: ((this: Screen, ev: Event) => any) | null;
+    addEventListener<T extends keyof ScreenEventMap>(
+      type: T,
+      listener: typeof screen.onchange,
+    ): void;
+    removeEventListener<T extends keyof ScreenEventMap>(
+      type: T,
+      listener: typeof screen.onchange,
+    ): void;
+    dispatchEvent(event: Event): boolean;
   }
 }
 
@@ -19,7 +27,7 @@ let colorDepth: number = screen.colorDepth;
 let pixelDepth: number = screen.pixelDepth;
 let devicePixelRatio: number = window.devicePixelRatio;
 
-let listener: typeof window.onscreenchange = null;
+let listener: typeof screen.onchange = null;
 
 function update() {
   if (
@@ -39,23 +47,70 @@ function update() {
     pixelDepth = screen.pixelDepth;
     devicePixelRatio = window.devicePixelRatio;
 
-    window.dispatchEvent(new Event("screenchange"));
+    screen.dispatchEvent(new Event("change"));
   }
   window.requestAnimationFrame(update);
 }
 
-if (!Reflect.has(window, "onscreenchange")) {
-  Object.defineProperty(window, "onscreenchange", {
+if (!Reflect.has(screen, "onchange")) {
+
+  if (!Reflect.has(screen, "dispatchEvent")) {
+    const listeners: Map<keyof ScreenEventMap, ((this: Screen, ev: Event) => any)[]> = new Map();
+    const prototype = Object.getPrototypeOf(screen);
+
+    prototype.addEventListener = function(
+      type: keyof ScreenEventMap,
+      listener: (this: Screen, ev: Event) => any,
+    ): void {
+      if (typeof listener != "function") return;
+      if (!listeners.has(type)) listeners.set(type, []);
+      (listeners.get(type) as ((this: Screen, ev: Event) => any)[]).push(listener);
+    }
+
+    prototype.removeEventListener = function(
+      type: keyof ScreenEventMap,
+      listener: (this: Screen, ev: Event) => any,
+    ): void {
+      if (typeof listener != "function") return;
+      const stack = listeners.get(type);
+      if (!stack) return;
+
+      for (let i = 0, l = stack.length; i < l; i++) {
+        if (stack[i] === listener) {
+          stack.splice(i, 1);
+          return;
+        }
+      }
+    }
+
+    prototype.dispatchEvent = function(event: Event): boolean {
+      const type = event.type as keyof ScreenEventMap;
+      if (!listeners.has(type)) return false;
+
+      const stack = listeners.get(type) as ((this: Screen, ev: Event) => any)[];
+
+      for (let i = 0, l = stack.length; i < l; i++) {
+        try {
+          stack[i].call(screen, event);
+        } catch (error) {
+          setTimeout(() => { throw error });
+        }
+      }
+      return true;
+    }
+  }
+
+  Object.defineProperty(screen, "onchange", {
     get() {
       return listener;
     },
     set(value: typeof listener) {
       if (typeof value == "function") {
-        listener && window.removeEventListener("screenchange", listener);
+        listener && screen.removeEventListener("change", listener);
         listener = value;
-        window.addEventListener("screenchange", listener);
+        screen.addEventListener("change", listener);
       } else if (!value && listener) {
-        window.removeEventListener("screenchange", listener);
+        screen.removeEventListener("change", listener);
         listener = null;
       }
     }
