@@ -3,8 +3,8 @@ export {};
 declare global {
   interface VisualViewport {
     onmove: ((this: VisualViewport, ev: Event) => any) | null;
-    offsetX: number;
-    offsetY: number;
+    offsetX: number | null;
+    offsetY: number | null;
   }
 
   interface VisualViewportEventMap {
@@ -12,32 +12,43 @@ declare global {
   }
 }
 
-let offsetX: number = window.outerWidth - window.innerWidth;
-let offsetY: number = window.outerHeight - window.innerHeight;
+const threshold: number = 9;
 
 let listener: typeof visualViewport.onmove = null;
 
-function update(event: MouseEvent) {
-  offsetX = event.screenX - window.screenX - event.clientX;
-  offsetY = event.screenY - window.screenY - event.clientY;
+function update(offsetX: number, offsetY: number) {
+  const diffX = offsetX - (visualViewport.offsetX as number);
+  const diffY = offsetY - (visualViewport.offsetY as number);
 
-  const dx = offsetX - visualViewport.offsetX;
-  const dy = offsetY - visualViewport.offsetY;
-
-  if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+  if (Math.abs(diffX) > 1 || Math.abs(diffY) > 1) {
     visualViewport.offsetX = offsetX;
     visualViewport.offsetY = offsetY;
+
     visualViewport.dispatchEvent(new Event("move"));
   }
 }
 
 function onmouseevent(event: MouseEvent) {
-  if (event.isTrusted) update(event);
+  if (event.isTrusted) {
+    const offsetX = Math.max(event.screenX - window.screenX - event.clientX, 0);
+    const offsetY = Math.max(event.screenY - window.screenY - event.clientY, 0);
+    update(offsetX < threshold ? 0 : offsetX, offsetY);
+  }
+}
+
+function onresize() {
+  if (window.innerHeight == screen.height) {
+    update(visualViewport.offsetX as number, 0);
+    document.addEventListener("mousemove", onmouseevent, { once: true });
+  } else if (window.innerWidth == screen.width) {
+    update(0, visualViewport.offsetY as number);
+    document.addEventListener("mousemove", onmouseevent, { once: true });
+  }
 }
 
 if (!Reflect.has(visualViewport, "onmove")) {
-  visualViewport.offsetX = offsetX;
-  visualViewport.offsetY = offsetY;
+  visualViewport.offsetX = null;
+  visualViewport.offsetY = null;
 
   Object.defineProperty(visualViewport, "onmove", {
     get() {
@@ -55,6 +66,10 @@ if (!Reflect.has(visualViewport, "onmove")) {
     }
   });
 
-  window.addEventListener("mousemove", onmouseevent);
-  window.addEventListener("click", onmouseevent);
+  document.addEventListener("mousemove", onmouseevent, { once: true });
+
+  document.addEventListener("mouseover", onmouseevent);
+  document.addEventListener("mouseout", onmouseevent);
+
+  window.addEventListener("resize", onresize);
 }

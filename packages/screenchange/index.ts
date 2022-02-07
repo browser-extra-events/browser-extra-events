@@ -30,7 +30,7 @@ let devicePixelRatio: number = window.devicePixelRatio;
 let listener: typeof screen.onchange = null;
 
 function update() {
-  if (
+  if (!document.fullscreenElement && (
       width != screen.width ||
       height != screen.height ||
       availWidth != screen.availWidth ||
@@ -38,7 +38,7 @@ function update() {
       colorDepth != screen.colorDepth ||
       pixelDepth != screen.pixelDepth ||
       devicePixelRatio != window.devicePixelRatio
-  ) {
+    )) {
     width = screen.width;
     height = screen.height;
     availWidth = screen.availWidth;
@@ -88,10 +88,19 @@ if (!Reflect.has(screen, "onchange")) {
       if (!listeners.has(type)) return false;
 
       const stack = listeners.get(type) as ((this: Screen, ev: Event) => any)[];
+      // @ts-ignore
+      const _event: Event = {
+        isTrusted: false,
+        currentTarget: screen,
+        eventPhase: Event.AT_TARGET,
+        target: screen,
+        timeStamp: event.timeStamp,
+        type: event.type,
+      };
 
       for (let i = 0, l = stack.length; i < l; i++) {
         try {
-          stack[i].call(screen, event);
+          stack[i].call(screen, _event);
         } catch (error) {
           setTimeout(() => { throw error });
         }
