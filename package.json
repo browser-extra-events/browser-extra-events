@@ -1,12 +1,13 @@
 {
   "name": "browser-extra-events",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "workspaces": [
     "packages/*"
   ],
   "files": [
     "packages/*/dist/",
-    "packages/*/package.json"
+    "packages/*/package.json",
+    "LICENSE"
   ],
   "exports": {
     "./windowmove": "./packages/windowmove/dist/index.js",

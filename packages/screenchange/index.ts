@@ -1,3 +1,8 @@
+/**
+ * @author Rostyslav Bohomaz
+ * @copyright 2022 Rostyslav Bohomaz. All rights reserved.
+ * See LICENSE file in root directory for full license.
+ */
 export {};
 
 declare global {
