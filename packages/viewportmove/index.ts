@@ -39,9 +39,9 @@ function onmouseevent(event: MouseEvent) {
 function onresize() {
   if (window.innerHeight == screen.height) {
     update(visualViewport.offsetX as number, 0);
-    document.addEventListener("mousemove", onmouseevent, { once: true });
   } else if (window.innerWidth == screen.width) {
     update(0, visualViewport.offsetY as number);
+  } else {
     document.addEventListener("mousemove", onmouseevent, { once: true });
   }
 }
