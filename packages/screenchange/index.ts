@@ -30,31 +30,22 @@ declare global {
 
 let width: number = screen.width;
 let height: number = screen.height;
-let availWidth: number = screen.availWidth;
-let availHeight: number = screen.availHeight;
 let colorDepth: number = screen.colorDepth;
 let pixelDepth: number = screen.pixelDepth;
-let devicePixelRatio: number = window.devicePixelRatio;
 
 let listener: typeof screen.onchange = null;
 
 function update() {
-  if (!document.fullscreenElement && (
+  if ((
       width != screen.width ||
       height != screen.height ||
-      availWidth != screen.availWidth ||
-      availHeight != screen.availHeight ||
       colorDepth != screen.colorDepth ||
-      pixelDepth != screen.pixelDepth ||
-      devicePixelRatio != window.devicePixelRatio
+      pixelDepth != screen.pixelDepth
     )) {
     width = screen.width;
     height = screen.height;
-    availWidth = screen.availWidth;
-    availHeight = screen.availHeight;
     colorDepth = screen.colorDepth;
     pixelDepth = screen.pixelDepth;
-    devicePixelRatio = window.devicePixelRatio;
 
     screen.dispatchEvent(new Event("change"));
   }
