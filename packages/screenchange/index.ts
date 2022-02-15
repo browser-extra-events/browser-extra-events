@@ -11,7 +11,6 @@ declare global {
   }
 
   interface Screen extends EventTarget {
-    onchange: ((this: Screen, ev: Event) => any) | null;
     addEventListener<T extends keyof ScreenEventMap>(
       type: T,
       listener: typeof screen.onchange,
@@ -21,6 +20,11 @@ declare global {
       listener: typeof screen.onchange,
     ): void;
     dispatchEvent(event: Event): boolean;
+  }
+
+  interface Screen {
+    pixelRatio: number;
+    onchange: ((this: Screen, ev: Event) => any) | null;
   }
 }
 
@@ -112,6 +116,14 @@ if (!Reflect.has(screen, "onchange")) {
       }
       return true;
     }
+  }
+
+  if (!Reflect.has(screen, "pixelRatio")) {
+    Object.defineProperty(screen, "pixelRatio", {
+      get() {
+        return window.devicePixelRatio;
+      }
+    })
   }
 
   Object.defineProperty(screen, "onchange", {

@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rollup -c",
     "prepare": "npm run build",
-    "dev": "rollup -cw"
+    "build:watch": "rollup -cw"
   },
   "files": [
     "dist"

@@ -5,7 +5,7 @@
   "description": "Example of usage browser-extra-events",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -cw"
+    "build:watch": "rollup -cw"
   },
   "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
   "license": "MIT",

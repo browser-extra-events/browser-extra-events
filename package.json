@@ -1,7 +1,7 @@
 {
   "name": "browser-extra-events",
   "description": "Additional events for browser.",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
   "license": "MIT",
   "workspaces": [
@@ -22,8 +22,8 @@
     "url": "https://github.com/rostyslavb/browser-extra-events"
   },
   "scripts": {
-    "dev": "lerna run dev --parallel",
     "build": "lerna run build",
+    "build:watch": "lerna run build:watch --parallel",
     "prepare": "lerna bootstrap",
     "example": "npm --prefix ./example run dev"
   },
