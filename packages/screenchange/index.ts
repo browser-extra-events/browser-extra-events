@@ -7,7 +7,7 @@ export {};
 
 declare global {
   interface ScreenEventMap {
-    "change": Event
+    "change": UIEvent
   }
 
   interface Screen extends EventTarget {
@@ -23,7 +23,7 @@ declare global {
   }
 
   interface Screen {
-    onchange: ((this: Screen, ev: Event) => any) | null;
+    onchange: ((this: Screen, ev: UIEvent) => any) | null;
     availLeft: number;
     availTop: number;
   }
@@ -101,11 +101,13 @@ if (!Reflect.has(screen, "onchange")) {
           type: event.type,
           timeStamp: event.timeStamp,
           eventPhase: Event.AT_TARGET,
+          // @ts-ignore
           currentTarget: screen,
+          // @ts-ignore
           target: screen,
           returnValue: true,
           // @ts-ignore
-          [Symbol.toStringTag]: "Event",
+          [Symbol.toStringTag]: event[Symbol.toStringTag],
         };
 
         for (let i = 0, l = stack.length; i < l; i++) {

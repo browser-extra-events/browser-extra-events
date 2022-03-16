@@ -7,13 +7,13 @@ export {};
 
 declare global {
   interface VisualViewport {
-    onmove: ((this: VisualViewport, ev: Event) => any) | null;
+    onmove: ((this: VisualViewport, ev: UIEvent) => any) | null;
     offsetX: number;
     offsetY: number;
   }
 
   interface VisualViewportEventMap {
-    "move": Event
+    "move": UIEvent
   }
 }
 
@@ -29,7 +29,7 @@ function update(offsetX: number, offsetY: number) {
     visualViewport.offsetX = offsetX;
     visualViewport.offsetY = offsetY;
 
-    visualViewport.dispatchEvent(new Event("move"));
+    visualViewport.dispatchEvent(new UIEvent("move"));
   }
 }
 
