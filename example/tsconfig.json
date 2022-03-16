@@ -1,13 +1,6 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "node",
-    "declaration": false,
-    "strict": true,
-    "target": "ES2015",
-    "module": "ES2015",
-    "removeComments": true
-  },
-  "files": [
-    "main.ts"
-  ]
+  "extends": "@tsconfig/svelte/tsconfig.json",
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }
