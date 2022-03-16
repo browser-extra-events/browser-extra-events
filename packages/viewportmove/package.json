@@ -1,6 +1,6 @@
 {
   "name": "@browser-extra-events/viewportmove",
-  "version": "1.0.0",
+  "private": true,
   "description": "Window viewport move event",
   "browser": "dist/viewportmove-event.js",
   "module": "dist/index.js",

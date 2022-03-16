@@ -1,6 +1,6 @@
 {
   "name": "@browser-extra-events/windowmove",
-  "version": "1.0.0",
+  "private": true,
   "description": "Browser window move event",
   "browser": "dist/windowmove-event.js",
   "module": "dist/index.js",
