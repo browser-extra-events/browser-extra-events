@@ -8,8 +8,8 @@ export {};
 declare global {
   interface VisualViewport {
     onmove: ((this: VisualViewport, ev: Event) => any) | null;
-    offsetX: number | null;
-    offsetY: number | null;
+    offsetX: number;
+    offsetY: number;
   }
 
   interface VisualViewportEventMap {
@@ -35,6 +35,10 @@ function update(offsetX: number, offsetY: number) {
 
 function onmouseevent(event: MouseEvent) {
   if (event.isTrusted) {
+    // NOTE:
+    // Limitations:
+    // 1. page zoom should be 100%;
+    // 2. window should be on the main screen
     const offsetX = Math.max(event.screenX - window.screenX - event.clientX, 0);
     const offsetY = Math.max(event.screenY - window.screenY - event.clientY, 0);
     update(offsetX < threshold ? 0 : offsetX, offsetY);
@@ -42,9 +46,9 @@ function onmouseevent(event: MouseEvent) {
 }
 
 function onresize() {
-  if (window.innerHeight == screen.height) {
+  if (visualViewport.height == screen.height) {
     update(visualViewport.offsetX as number, 0);
-  } else if (window.innerWidth == screen.width) {
+  } else if (visualViewport.width == screen.width) {
     update(0, visualViewport.offsetY as number);
   } else {
     document.addEventListener("mousemove", onmouseevent, { once: true });
@@ -52,8 +56,8 @@ function onresize() {
 }
 
 if (!Reflect.has(visualViewport, "onmove")) {
-  visualViewport.offsetX = null;
-  visualViewport.offsetY = null;
+  visualViewport.offsetX = 0;
+  visualViewport.offsetY = 0;
 
   Object.defineProperty(visualViewport, "onmove", {
     get() {
@@ -74,7 +78,5 @@ if (!Reflect.has(visualViewport, "onmove")) {
   document.addEventListener("mousemove", onmouseevent, { once: true });
 
   document.addEventListener("mouseover", onmouseevent);
-  document.addEventListener("mouseout", onmouseevent);
-
   window.addEventListener("resize", onresize);
 }
