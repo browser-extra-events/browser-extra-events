@@ -1,6 +1,6 @@
 {
   "name": "@browser-extra-events/screenchange",
-  "version": "1.0.0",
+  "private": true,
   "description": "Browser screen change event",
   "browser": "dist/screenchange-event.js",
   "module": "dist/index.js",
