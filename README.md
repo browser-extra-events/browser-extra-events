@@ -17,3 +17,7 @@ npm install browser-extra-events
 ## `viewportmove`
 
 ![viewportmove](./assets/viewportmove.gif)
+
+## `zoomchange`
+
+![zoomchange](./assets/zoomchange.gif)

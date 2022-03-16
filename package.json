@@ -15,7 +15,8 @@
   "exports": {
     "./windowmove": "./packages/windowmove/dist/index.js",
     "./viewportmove": "./packages/viewportmove/dist/index.js",
-    "./screenchange": "./packages/screenchange/dist/index.js"
+    "./screenchange": "./packages/screenchange/dist/index.js",
+    "./zoomchange": "./packages/zoomchange/dist/index.js"
   },
   "repository": {
     "type": "git",
