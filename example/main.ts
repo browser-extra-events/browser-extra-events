@@ -19,7 +19,8 @@ screen.addEventListener("change", function(event) {
   }, {
     width: screen.width,
     height: screen.height,
-    pixelRatio: window.devicePixelRatio,
+    availTop: screen.availTop,
+    availLeft: screen.availLeft,
     colorDepth: screen.colorDepth,
     pixelDepth: screen.pixelDepth,
   });

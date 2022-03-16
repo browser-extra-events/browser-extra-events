@@ -23,11 +23,14 @@ declare global {
   }
 
   interface Screen {
-    pixelRatio: number;
     onchange: ((this: Screen, ev: Event) => any) | null;
+    availLeft: number;
+    availTop: number;
   }
 }
 
+let availLeft: number = screen.availLeft;
+let availTop: number = screen.availTop;
 let width: number = screen.width;
 let height: number = screen.height;
 let colorDepth: number = screen.colorDepth;
@@ -37,11 +40,15 @@ let listener: typeof screen.onchange = null;
 
 function update() {
   if ((
+      availTop != screen.availTop ||
+      availLeft != screen.availLeft ||
       width != screen.width ||
       height != screen.height ||
       colorDepth != screen.colorDepth ||
       pixelDepth != screen.pixelDepth
     )) {
+    availTop = screen.availTop;
+    availLeft = screen.availLeft;
     width = screen.width;
     height = screen.height;
     colorDepth = screen.colorDepth;
@@ -55,7 +62,9 @@ function update() {
 if (!Reflect.has(screen, "onchange")) {
 
   if (!Reflect.has(screen, "dispatchEvent")) {
-    const listeners: Map<keyof ScreenEventMap, ((this: Screen, ev: Event) => any)[]> = new Map();
+    const listeners: Record<keyof ScreenEventMap, Array<(this: Screen, ev: Event) => any>> = {
+      change: [],
+    };
     const prototype = Object.getPrototypeOf(screen);
 
     prototype.addEventListener = function(
@@ -63,8 +72,8 @@ if (!Reflect.has(screen, "onchange")) {
       listener: (this: Screen, ev: Event) => any,
     ): void {
       if (typeof listener != "function") return;
-      if (!listeners.has(type)) listeners.set(type, []);
-      (listeners.get(type) as ((this: Screen, ev: Event) => any)[]).push(listener);
+      const stack = listeners[type];
+      if (stack) stack.push(listener);
     }
 
     prototype.removeEventListener = function(
@@ -72,49 +81,43 @@ if (!Reflect.has(screen, "onchange")) {
       listener: (this: Screen, ev: Event) => any,
     ): void {
       if (typeof listener != "function") return;
-      const stack = listeners.get(type);
-      if (!stack) return;
-
-      for (let i = 0, l = stack.length; i < l; i++) {
-        if (stack[i] === listener) {
-          stack.splice(i, 1);
-          return;
+      const stack = listeners[type];
+      if (stack) {
+        for (let i = 0, l = stack.length; i < l; i++) {
+          if (stack[i] === listener) {
+            stack.splice(i, 1);
+            return;
+          }
         }
       }
     }
 
     prototype.dispatchEvent = function(event: Event): boolean {
-      const type = event.type as keyof ScreenEventMap;
-      if (!listeners.has(type)) return false;
+      const stack = listeners[event.type as keyof ScreenEventMap];
+      if (stack) {
+        // @ts-ignore
+        const _event: Event = {
+          isTrusted: false,
+          type: event.type,
+          timeStamp: event.timeStamp,
+          eventPhase: Event.AT_TARGET,
+          currentTarget: screen,
+          target: screen,
+          returnValue: true,
+          // @ts-ignore
+          [Symbol.toStringTag]: "Event",
+        };
 
-      const stack = listeners.get(type) as ((this: Screen, ev: Event) => any)[];
-      // @ts-ignore
-      const _event: Event = {
-        isTrusted: false,
-        currentTarget: screen,
-        eventPhase: Event.AT_TARGET,
-        target: screen,
-        timeStamp: event.timeStamp,
-        type: event.type,
-      };
-
-      for (let i = 0, l = stack.length; i < l; i++) {
-        try {
-          stack[i].call(screen, _event);
-        } catch (error) {
-          setTimeout(() => { throw error });
+        for (let i = 0, l = stack.length; i < l; i++) {
+          try {
+            stack[i].call(screen, _event);
+          } catch (error) {
+            setTimeout(() => { throw error });
+          }
         }
       }
       return true;
     }
-  }
-
-  if (!Reflect.has(screen, "pixelRatio")) {
-    Object.defineProperty(screen, "pixelRatio", {
-      get() {
-        return window.devicePixelRatio;
-      }
-    })
   }
 
   Object.defineProperty(screen, "onchange", {
