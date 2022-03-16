@@ -1,6 +1,7 @@
 import "@browser-extra-events/windowmove";
 import "@browser-extra-events/viewportmove";
 import "@browser-extra-events/screenchange";
+import "@browser-extra-events/zoomchange";
 
 window.addEventListener("move", function(event) {
   console.info("%cwindow", "color:white;background:blue", {
@@ -9,6 +10,15 @@ window.addEventListener("move", function(event) {
   }, {
     screenX: window.screenX,
     screenY: window.screenY
+  });
+});
+
+window.addEventListener("zoom", function(event) {
+  console.info("%cwindow", "color:white;background:blue", {
+    timeStamp: event.timeStamp,
+    type: event.type,
+  }, {
+    devicePixelRatio,
   });
 });
 
