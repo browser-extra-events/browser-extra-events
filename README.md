@@ -2,6 +2,10 @@
 
 Additional events for browser.
 
+```
+npm install browser-extra-events
+```
+
 ## `windowmove`
 
 ![windowmove](./assets/windowmove.gif)
