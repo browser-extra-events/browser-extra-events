@@ -1,7 +1,7 @@
 {
   "name": "browser-extra-events",
   "description": "Additional events for browser.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
   "license": "MIT",
   "workspaces": [
