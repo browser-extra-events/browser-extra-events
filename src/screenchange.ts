@@ -5,6 +5,8 @@
  */
 export {};
 
+import extendEventTarget from "extend-event-target";
+
 declare global {
   interface ScreenEventMap {
     "change": UIEvent
@@ -62,64 +64,7 @@ function update() {
 if (!Reflect.has(screen, "onchange")) {
 
   if (!Reflect.has(screen, "dispatchEvent")) {
-    const listeners: Record<keyof ScreenEventMap, Array<(this: Screen, ev: Event) => any>> = {
-      change: [],
-    };
-    const prototype = Object.getPrototypeOf(screen);
-
-    prototype.addEventListener = function(
-      type: keyof ScreenEventMap,
-      listener: (this: Screen, ev: Event) => any,
-    ): void {
-      if (typeof listener != "function") return;
-      const stack = listeners[type];
-      if (stack) stack.push(listener);
-    }
-
-    prototype.removeEventListener = function(
-      type: keyof ScreenEventMap,
-      listener: (this: Screen, ev: Event) => any,
-    ): void {
-      if (typeof listener != "function") return;
-      const stack = listeners[type];
-      if (stack) {
-        for (let i = 0, l = stack.length; i < l; i++) {
-          if (stack[i] === listener) {
-            stack.splice(i, 1);
-            return;
-          }
-        }
-      }
-    }
-
-    prototype.dispatchEvent = function(event: Event): boolean {
-      const stack = listeners[event.type as keyof ScreenEventMap];
-      if (stack) {
-        // @ts-ignore
-        const _event: Event = {
-          isTrusted: false,
-          type: event.type,
-          timeStamp: event.timeStamp,
-          eventPhase: Event.AT_TARGET,
-          // @ts-ignore
-          currentTarget: screen,
-          // @ts-ignore
-          target: screen,
-          returnValue: true,
-          // @ts-ignore
-          [Symbol.toStringTag]: event[Symbol.toStringTag],
-        };
-
-        for (let i = 0, l = stack.length; i < l; i++) {
-          try {
-            stack[i].call(screen, _event);
-          } catch (error) {
-            setTimeout(() => { throw error });
-          }
-        }
-      }
-      return true;
-    }
+    extendEventTarget(screen);
   }
 
   Object.defineProperty(screen, "onchange", {
