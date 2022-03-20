@@ -1,5 +1,6 @@
 <script lang="ts">
-  import  "@browser-extra-events/viewportmove";
+  import "browser-extra-events/viewportmove";
+  import type {} from "browser-extra-events/types/viewportmove";
 
   import { onMount, onDestroy } from "svelte";
   

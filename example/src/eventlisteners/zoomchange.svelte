@@ -1,5 +1,6 @@
 <script lang="ts">
-  import  "@browser-extra-events/zoomchange";
+  import "browser-extra-events/zoomchange";
+  import type {} from "browser-extra-events/types/zoomchange";
 
   import { onMount, onDestroy } from "svelte";
   

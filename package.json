@@ -1,34 +1,51 @@
 {
   "name": "browser-extra-events",
   "description": "Additional events for browser.",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
   "files": [
-    "packages/*/dist/",
-    "packages/*/package.json",
-    "LICENSE"
+    "dist",
+    "types"
   ],
   "exports": {
-    "./windowmove": "./packages/windowmove/dist/index.js",
-    "./viewportmove": "./packages/viewportmove/dist/index.js",
-    "./screenchange": "./packages/screenchange/dist/index.js",
-    "./zoomchange": "./packages/zoomchange/dist/index.js"
+    ".": "./dist/",
+    "./types": "./types/",
+    "./package.json": "./package.json",
+    "./windowmove": {
+      "import": "./dist/windowmove.js",
+      "types": "./types/windowmove.d.ts",
+      "browser": "./dist/windowmove.min.js"
+    },
+    "./viewportmove": {
+      "import": "./dist/viewportmove.js",
+      "types": "./types/viewportmove.d.ts",
+      "browser": "./dist/viewportmove.min.js"
+    },
+    "./screenchange": {
+      "import": "./dist/screenchange.js",
+      "types": "./types/screenchange.d.ts",
+      "browser": "./dist/screenchange.min.js"
+    },
+    "./zoomchange": {
+      "import": "./dist/zoomchange.js",
+      "types": "./types/zoomchange.d.ts",
+      "browser": "./dist/zoomchange.min.js"
+    }
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/rostyslavb/browser-extra-events"
   },
   "scripts": {
-    "build": "lerna run build",
-    "build:watch": "lerna run build:watch --parallel",
-    "prepare": "lerna bootstrap",
-    "example": "npm --prefix ./example run dev"
+    "build": "ts-node scripts/build.ts",
+    "build:watch": "npm run build -- --watch",
+    "example:dev": "npm --prefix ./example run dev"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "esbuild": "^0.14.27",
+    "esbuild-plugin-d.ts": "^1.1.0",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
   }
 }

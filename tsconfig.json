@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "declarationDir": "types",
+    "declaration": true,
+    "strict": true,
+    "target": "ES2015",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "esModuleInterop": true
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+    }
+  }
+}

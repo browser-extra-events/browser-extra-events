@@ -1,5 +1,6 @@
 <script lang="ts">
-  import  "@browser-extra-events/windowmove";
+  import "browser-extra-events/windowmove";
+  import type {} from "browser-extra-events/types/windowmove";
 
   import { onMount, onDestroy } from "svelte";
   
