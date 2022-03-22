@@ -1,5 +1,4 @@
 <script lang="ts">
-  import "browser-extra-events/screenchange";
   import type {} from "browser-extra-events/types/screenchange";
 
   import { onMount, onDestroy } from "svelte";

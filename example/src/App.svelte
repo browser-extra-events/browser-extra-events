@@ -1,24 +1,33 @@
 <script lang="ts">
-  import screenchange from "./eventlisteners/screenchange.svelte";
-  import viewportmove from "./eventlisteners/viewportmove.svelte";
-  import windowmove from "./eventlisteners/windowmove.svelte";
-  import zoomchange from "./eventlisteners/zoomchange.svelte";
+  import ScreenChangeLog from "./lib/ScreenChangeLog.svelte";
+  import ViewportMoveLog from "./lib/ViewportMoveLog.svelte";
+  import WindowMoveLog from "./lib/WindowMoveLog.svelte";
+  import ZoomChangeLog from "./lib/ZoomChangeLog.svelte";
 
-  import EventToggle from "./EventToggle.svelte";
+  import ComponentToggle from "./lib/ComponentToggle.svelte";
 </script>
 
 <main>
   <h1>@browser-extra-events/example</h1>
 
   <div class="container">
-    <EventToggle component={windowmove} label="windowmove" />
-    <EventToggle component={screenchange} label="screenchange" />
-    <EventToggle component={zoomchange} label="zoomchange" />
-    <EventToggle component={viewportmove} label="viewportmove" />
+    <ComponentToggle component={WindowMoveLog} label="windowmove" />
+    <ComponentToggle component={ScreenChangeLog} label="screenchange" />
+    <ComponentToggle component={ZoomChangeLog} label="zoomchange" />
+    <ComponentToggle component={ViewportMoveLog} label="viewportmove" />
   </div>
 </main>
 
 <style>
+  :global(body) {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+	h1 {
+		color: #ff3e00;
+		font-size: larger;
+		font-weight: 500;
+	}
 	main {
 		max-width: 320px;
 		margin: 0 auto;
@@ -28,16 +37,4 @@
   .container {
     text-align: left;
   }
-
-	h1 {
-		color: #ff3e00;
-		font-size: larger;
-		font-weight: 500;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let component: any;
+  import type { SvelteComponent } from "svelte";
+
+  export let component: typeof SvelteComponent;
   export let label: string;
 
   let checked: boolean = true;
@@ -13,3 +15,9 @@
 {#if checked}
   <svelte:component this={component} />
 {/if}
+
+<style>
+  label {
+    display: block;
+  }
+</style>
