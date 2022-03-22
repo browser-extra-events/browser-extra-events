@@ -36,7 +36,8 @@
   "scripts": {
     "build": "ts-node scripts/build.ts",
     "build:watch": "npm run build -- --watch",
-    "example:dev": "npm --prefix ./example run dev"
+    "example:dev": "npm --prefix ./example run dev",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "esbuild": "^0.14.27",
