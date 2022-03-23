@@ -17,6 +17,7 @@ const common: BuildConfig = {
 build({
   ...common,
   format: "iife",
+  minify: false,
   // @ts-ignore
   plugins: [ dts() ]
 })
