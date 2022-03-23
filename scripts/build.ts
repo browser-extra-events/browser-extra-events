@@ -1,10 +1,8 @@
-import { build, analyzeMetafile, BuildOptions } from "esbuild";
+import { build, BuildConfig, dirname } from "estrella";
 import { dtsPlugin as dts } from "esbuild-plugin-d.ts";
 
-const watch: boolean = !!process.argv.find(v => v === "--watch");
-
-const common: BuildOptions = {
-  entryPoints: [
+const common: BuildConfig = {
+  entry: [
     "./src/screenchange.js",
     "./src/viewportmove.js",
     "./src/windowmove.js",
@@ -13,12 +11,13 @@ const common: BuildOptions = {
   outdir: "./dist/",
   platform: "browser",
   bundle: true,
-  watch,
+  cwd: dirname(__dirname),
 }
 
 build({
   ...common,
   format: "iife",
+  // @ts-ignore
   plugins: [ dts() ]
 })
 
@@ -32,5 +31,3 @@ build({
   sourcemap: "external",
   metafile: true,
 })
-  .then(result => analyzeMetafile(result.metafile))
-  .then(text => console.log(text))

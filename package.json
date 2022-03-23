@@ -1,7 +1,7 @@
 {
   "name": "browser-extra-events",
   "description": "Additional events for browser.",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "author": "Rostyslav Bohomaz <rostyslav.db@gmail.com>",
   "license": "MIT",
   "files": [
@@ -35,13 +35,13 @@
   },
   "scripts": {
     "build": "ts-node scripts/build.ts",
-    "build:watch": "npm run build -- --watch",
+    "build:watch": "npm run build -- -watch",
     "example:dev": "npm --prefix ./example run dev",
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "esbuild": "^0.14.27",
     "esbuild-plugin-d.ts": "^1.1.0",
+    "estrella": "^1.4.1",
     "extend-event-target": "^1.0.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
