@@ -12,14 +12,14 @@ declare global {
     "change": UIEvent
   }
 
-  interface Screen extends EventTarget {
+  interface Screen {
     addEventListener<T extends keyof ScreenEventMap>(
       type: T,
-      listener: typeof screen.onchange,
+      listener: (this: Screen, ev: UIEvent) => any,
     ): void;
     removeEventListener<T extends keyof ScreenEventMap>(
       type: T,
-      listener: typeof screen.onchange,
+      listener: (this: Screen, ev: UIEvent) => any,
     ): void;
     dispatchEvent(event: Event): boolean;
   }
